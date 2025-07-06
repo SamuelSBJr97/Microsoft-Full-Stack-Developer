@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 List<string> books = new List<string>();
 List<string> borrowedBooks = new List<string>(); // Track borrowed books
 const int maxBooks = 5;
