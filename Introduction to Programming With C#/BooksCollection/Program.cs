@@ -1,76 +1,70 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
+using System.Collections.Generic;
 Console.WriteLine("Hello, World!");
 
-string book1 = "";
-string book2 = "";
-string book3 = "";
-string book4 = "";
-string book5 = "";
+List<string> books = new List<string>();
+const int maxBooks = 5;
 
 while (true)
 {
-    Console.WriteLine("\nEscolha uma ação: add, remove, list, exit");
-    string action = (Console.ReadLine() ?? "").Trim().ToLower();
+    Console.WriteLine("\nChoose an action:");
+    Console.WriteLine("Add a book    - add");
+    Console.WriteLine("Remove a book - remove");
+    Console.WriteLine("List books    - list");
+    Console.WriteLine("Exit          - exit");
+    Console.Write("Enter the number of your choice: ");
+    string actionInput = (Console.ReadLine() ?? "").Trim();
 
-    if (action == "add")
+    switch (actionInput)
     {
-        if (book1 != "" && book2 != "" && book3 != "" && book4 != "" && book5 != "")
-        {
-            Console.WriteLine("A biblioteca está cheia. Não é possível adicionar mais livros.");
-            continue;
-        }
-        Console.WriteLine("Digite o título do livro para adicionar:");
-        string newBook = Console.ReadLine() ?? "";
-        if (string.IsNullOrWhiteSpace(newBook))
-        {
-            Console.WriteLine("Título inválido.");
-            continue;
-        }
-        if (book1 == "") book1 = newBook;
-        else if (book2 == "") book2 = newBook;
-        else if (book3 == "") book3 = newBook;
-        else if (book4 == "") book4 = newBook;
-        else if (book5 == "") book5 = newBook;
-        Console.WriteLine($"Livro '{newBook}' adicionado.");
-    }
-    else if (action == "remove")
-    {
-        if (book1 == "" && book2 == "" && book3 == "" && book4 == "" && book5 == "")
-        {
-            Console.WriteLine("A biblioteca está vazia. Não há livros para remover.");
-            continue;
-        }
-        Console.WriteLine("Digite o título do livro para remover:");
-        string removeBook = Console.ReadLine() ?? "";
-        bool removed = false;
-        if (book1.Equals(removeBook, StringComparison.OrdinalIgnoreCase)) { book1 = ""; removed = true; }
-        else if (book2.Equals(removeBook, StringComparison.OrdinalIgnoreCase)) { book2 = ""; removed = true; }
-        else if (book3.Equals(removeBook, StringComparison.OrdinalIgnoreCase)) { book3 = ""; removed = true; }
-        else if (book4.Equals(removeBook, StringComparison.OrdinalIgnoreCase)) { book4 = ""; removed = true; }
-        else if (book5.Equals(removeBook, StringComparison.OrdinalIgnoreCase)) { book5 = ""; removed = true; }
-        if (removed)
-            Console.WriteLine($"Livro '{removeBook}' removido.");
-        else
-            Console.WriteLine("Livro não encontrado.");
-    }
-    else if (action == "list")
-    {
-        Console.WriteLine("\nLivros na biblioteca:");
-        if (book1 != "") Console.WriteLine(book1);
-        if (book2 != "") Console.WriteLine(book2);
-        if (book3 != "") Console.WriteLine(book3);
-        if (book4 != "") Console.WriteLine(book4);
-        if (book5 != "") Console.WriteLine(book5);
-        if (book1 == "" && book2 == "" && book3 == "" && book4 == "" && book5 == "")
-            Console.WriteLine("Nenhum livro cadastrado.");
-    }
-    else if (action == "exit")
-    {
-        Console.WriteLine("Saindo do programa...");
-        break;
-    }
-    else
-    {
-        Console.WriteLine("Ação inválida. Tente novamente.");
+        case "add":
+            if (books.Count >= maxBooks)
+            {
+                Console.WriteLine("The library is full. No more books can be added.");
+                continue;
+            }
+            Console.WriteLine("Enter the title of the book to add:");
+            string newBook = Console.ReadLine() ?? "";
+            if (string.IsNullOrWhiteSpace(newBook))
+            {
+                Console.WriteLine("Invalid title.");
+                continue;
+            }
+            books.Add(newBook);
+            Console.WriteLine($"Book '{newBook}' added.");
+            break;
+        case "remove":
+            if (books.Count == 0)
+            {
+                Console.WriteLine("The library is empty. There are no books to remove.");
+                continue;
+            }
+            Console.WriteLine("Enter the title of the book to remove:");
+            string removeBook = Console.ReadLine() ?? "";
+            int index = books.FindIndex(b => b.Equals(removeBook, StringComparison.OrdinalIgnoreCase));
+            if (index >= 0)
+            {
+                books.RemoveAt(index);
+                Console.WriteLine($"Book '{removeBook}' removed.");
+            }
+            else
+            {
+                Console.WriteLine("Book not found.");
+            }
+            break;
+        case "list":
+            Console.WriteLine("\nBooks in the library:");
+            if (books.Count == 0)
+                Console.WriteLine("No books registered.");
+            else
+                foreach (var book in books)
+                    Console.WriteLine(book);
+            break;
+        case "exit":
+            Console.WriteLine("Exiting the program...");
+            return;
+        default:
+            Console.WriteLine("Invalid action. Please try again.");
+            break;
     }
 }
